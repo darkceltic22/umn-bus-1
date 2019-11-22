@@ -1,10 +1,11 @@
 <?php
 require 'db-ts.php';
-
+// untuk menghapus jadwal bus pada tabel bus yang tgl berangkatnya kurang dari hari ini
 $sql = "DELETE FROM bus WHERE tglBerangkat < CURDATE()";
 $result = $koneksi->query($sql);
 echo $koneksi->error;
 
+//
 $sql_instance = "SELECT * FROM bus WHERE tglBerangkat = CURDATE() ORDER BY wktBerangkat ASC;";
 $result = $koneksi->query($sql_instance);
 $row = $result->fetch_assoc();
@@ -15,7 +16,7 @@ if ($result->num_rows == 0) {
     while ($row = $result->fetch_assoc()) {
         if ($result->num_rows > 0) {
             $result2 = $koneksi->query("INSERT INTO bus VALUES
-	        				(DAYOFWEEK(CURDATE())*10+'" . $ind . "','" . $row["ruteID"] . "','" . $row["kapasitas"] . "',CURDATE(),'" . $row["wktBerangkat"] . "');");
+	        				(DAYOFWEEK(CURDATE())+'" . $ind . "','" . $row["ruteID"] . "','" . $row["kapasitas"] . "',CURDATE(),'" . $row["wktBerangkat"] . "');");
             $ind = $ind + 1;
             echo $koneksi->error;
         } else break;
