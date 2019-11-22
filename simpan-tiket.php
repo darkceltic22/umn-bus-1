@@ -10,7 +10,7 @@ require 'components/header.php';
     $bid = $_GET['bis'];
     $sql_instance = "SELECT * FROM tiket WHERE penggunaID=" . $userID . " AND (tglBerangkat = CURDATE() OR tglBerangkat = CURDATE() + INTERVAL 1 DAY);";
     $result = $koneksi->query($sql_instance);
-    if ($result->num_rows < 6) {
+    if ($result->num_rows < 4) {
         $sql_instance = "SELECT * FROM tiket WHERE busID=" . $bid . " AND penggunaID IS NULL;";
         $result = $koneksi->query($sql_instance);
         echo $koneksi->error;
@@ -49,7 +49,7 @@ require 'components/header.php';
     }
     function Limit()
     {
-        echo 'Sorry, you have exceeded the daily ticket limit!';
+        echo 'Maaf, kamu telah mencapai batas pemesanan tiket harian!';
     }
     ?>
 </body>

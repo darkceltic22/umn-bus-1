@@ -1,19 +1,58 @@
+<!DOCTYPE HTML>
+<html>
+<head>
+    <title>U-Bus | Pesan Tiket</title>
 <?php
 require 'koneksi.php';
 require 'components/header.php';
 ?>
+</head>
+<style>
+  body {
+  /*  background-image: url("http://www.banggaberubah.com/assets/article_image/original/UMN_1.png");
+    background-color: #cccccc;
+    background-size: 100%; */
+    background: rgb(43,159,220);
+    background: radial-gradient(circle, rgba(43,159,220,1) 0%, rgba(0,179,237,1) 93%, rgba(0,212,255,1) 100%);
+    font-family: 'Josefin Sans', sans-serif;
 
+  }
+  thead{
+    font-size: 1.2rem;
+  }
+  div.top {
+    margin-top: 10px;
+
+  }
+  a{
+    color:white;
+  }
+  tab-pane fade show active{
+    color:white;
+  }
+
+</style>
 <body>
 	<div class="container">
+    <div class="row">
+      <div class="col-md col-sm-3 text-left mt-4">
 		<h2>Silahkan Pilih Rute</h2>
-		<!--
-		<ul class="nav nav-tabs">
-			<li class="active"><a data-toggle="tab" href="#today">Hari ini</a></li>
-			<li><a data-toggle="tab" href="#tomorrow">Besok</a></li>
-		</ul>
-		-->
-		<div id="today">
-			<h4>Jadwal Bis Hari Ini:</h4>
+      </div>
+      <div class="col-md col-sm-3 mt-4 text-right">
+      <p>	<button type="button" class="btn btn-info" onclick=location.href='beranda.php'>< Kembali ke beranda</button> <p>
+      </div>
+    </div>
+			<ul class="nav nav-tabs">
+				<li class="active">
+					<a data-toggle="tab" class="nav-link active" href="#today">Hari ini</a>
+				</li>
+				<li>
+					<a data-toggle="tab" class="nav-link" href="#tomorrow">Besok</a>
+				</li>
+			</ul>
+	<div class="tab-content">
+		<div id="today" class="tab-pane fade show active">
+			<p><h4>Jadwal Bis Hari Ini:</h4><p>
 			<?php
 			createTable();
 			function createTable()
@@ -30,15 +69,15 @@ require 'components/header.php';
 					trigger_error('Invalid query: ' . $koneksi->error);
 				}
 				if ($result->num_rows > 0) {
-					echo '<table height:800px; display:block;" border="1">
+					echo '<div class="table-responsive-sm">
+                <table class="table">
 							    <thead>
 							      <tr>
-							        <th>Bis ID</th>
-							        <th>Rute ID</th>
 							        <th>Jumlah Kursi</th>
+											<th>Tanggal Berangkat</th>
 							        <th>Asal</th>
-									<th>Tujuan</th>
-									<th>Waktu Keberangkatan</th>
+							        <th>Tujuan</th>
+                      <th>Waktu Keberangkatan</th>
 							        <th>Waktu Tiba</th>
 							        <th>Pesan Tiket</th>
 							      </tr>
@@ -47,13 +86,11 @@ require 'components/header.php';
 					// output data per baris
 					while ($row = $result->fetch_assoc()) {
 						echo '<tr>
-                    <td>' . $row["busID"] . '</td>
-                    <td>' . $row["ruteID"] . '</td>
-                    <td>' . $row["jumlah_kursi"] . '</td>
-                   
- <td>' . $row["asal"] . '</td>
-					<td>' . $row["tujuan"] . '</td>
-					<td>' . $row["wktBerangkat"] . '</td>
+                    <th>' . $row["jumlah_kursi"] . '</td>
+										<td>' . $row["tglBerangkat"] . '</td>
+                    <td>' . $row["asal"] . '</td>
+                    <td>' . $row["tujuan"] . '</td>
+                    <td>' . $row["wktBerangkat"] . '</td>
                     <td>' . $row["wktTiba"] . '</td>';
 						if ($row['jumlah_kursi'] > 15) {
 							echo '<td><a href="simpan-tiket.php?bis=' . $row["busID"] . '" class="btn btn-success" role="button">Pesan</a></td>
@@ -66,13 +103,13 @@ require 'components/header.php';
                   </tr>';
 						}
 					}
-					echo '</tbody> </table>';
+					echo '</tbody> </table> </div>';
 				}
 			}
 			?>
 		</div>
-		<div id="tomorrow">
-			<h4>Jadwal Bis Besok:</h4>
+		<div id="tomorrow" class="tab-pane fade">
+			<p><h4>Jadwal Bis Besok:</h4><p>
 			<?php
 			createTable1();
 			function createTable1()
@@ -89,15 +126,15 @@ require 'components/header.php';
 					trigger_error('Invalid query: ' . $koneksi->error);
 				}
 				if ($result->num_rows > 0) {
-					echo '<table height:800px; display:block;" border="1">
+					echo '<div class="table-responsive-sm">
+                <table class="table">
 					<thead>
 					  <tr>
-						<th>Bis ID</th>
-						<th>Rute ID</th>
 						<th>Jumlah Kursi</th>
+						<th>Tanggal Berangkat</th>
 						<th>Asal</th>
 						<th>Tujuan</th>
-						<th>Waktu Keberangkatan</th>
+            <th>Waktu Keberangkatan</th>
 						<th>Waktu Tiba</th>
 						<th>Pesan Tiket</th>
 					  </tr>
@@ -106,22 +143,21 @@ require 'components/header.php';
 					// data per baris
 					while ($row = $result->fetch_assoc()) {
 						echo '<tr>
-						<td>' . $row["busID"] . '</td>
-						<td>' . $row["ruteID"] . '</td>
-						<td>' . $row["jumlah_kursi"] . '</td>
-						
+						<th>' . $row["jumlah_kursi"] . '</td>
+						<td>' . $row["tglBerangkat"] . '</td>
 						<td>' . $row["asal"] . '</td>
 						<td>' . $row["tujuan"] . '</td>
-						<td>' . $row["wktBerangkat"] . '</td>
+            <td>' . $row["wktBerangkat"] . '</td>
 						<td>' . $row["wktTiba"] . '</td>
 										<td><a href="simpan-tiket.php?bis=' . $row["busID"] . '" class="btn btn-success" role="button">Pesan</a></td>
 						      </tr>';
 					}
-					echo '</tbody> </table>';
+					echo '</tbody> </table> </div>';
 				}
 			}
 			?>
 		</div>
-		<p>
-		<input type="submit" value="Beranda" onclick="location.href='beranda.php';">
+	</div>
+</div>
+
 </body>

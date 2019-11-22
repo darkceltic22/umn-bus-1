@@ -1,4 +1,4 @@
-  <?php
+<?php
     require 'koneksi.php';
     require 'components/header.php';
     ?>
@@ -9,8 +9,13 @@ body {
     background-size: 100%; */
     background: rgb(43,159,220);
     background: radial-gradient(circle, rgba(43,159,220,1) 0%, rgba(0,179,237,1) 93%, rgba(0,212,255,1) 100%);
+    font-family: 'Josefin Sans', sans-serif;
+
   }
 
+  div.pesan {
+    margin-top: 250px;
+  }
 </style>
   <body>
       <div class="container">
@@ -21,46 +26,58 @@ body {
           <div class="col-md col-sm-3 mt-4 text-right">
       <p>	<button type="button" class="btn btn-info" onclick=location.href='beranda.php'>< Kembali ke beranda</button> <p>
       </div>
-          <table class="table">
+      <?php
+        require 'db-init.php';
+        $userID = $_SESSION['penggunaID'];
+        $sql1 = "SELECT * FROM tiket JOIN rute ON tiket.ruteID = rute.ruteID WHERE penggunaID = '$userID' ORDER BY tglBerangkat DESC;";
+        $result1 = $koneksi->query($sql1);
+        $numrows = mysqli_num_rows($result1);
+        if ($numrows==0) {
+          echo "<div class='container text-center' style='margin-top: 150px;'>
+          <div class= 'col-md-8 col-lg align-self-center'>
+          <center>
+              <h2>Kamu belum memesan tiket..</h2>
+                <div class='col-md col-sm-3 mt-4 text-center'>
+              <p>	<button type='button' class='btn btn-light' onclick=location.href='pesantiket.php'>Pesan Tiket Dulu!</button> <p>
+              </div>
+          </center>
+          </div>
+              </div>";
+        }
+          else {
+          echo '<table class="table">
               <thead>
                   <tr>
                       <th>Bus ID</th>
-                      <th>Route ID</th>
-                      <th>Journey Date</th>
-                      <th>Departure Time</th>
-                      <th>Source</th>
-                      <th>Destination</th>
-                      <th>Arrival Time</th>
-                      <th>Seat Number</th>
-                      <th>Digital Ticket</th>
+                      <th>Rute ID</th>
+                      <th>Tanggal Berangkat</th>
+                      <th>Asal</th>
+                      <th>Tujuan</th>
+                      <th>Waktu Berangkat</th>
+                      <th>Waktu Tiba</th>
+                      <th>Nomor Kursi</th>
+                      <th>Tiket Digital</th>
                   </tr>
               </thead>
-              <tbody>
-                  <?php
-                    require 'db-init.php';
-                    $userID = $_SESSION['penggunaID'];
-                    $sql = "SELECT kategoriID FROM pengguna WHERE penggunaID='$userID';";
-                    $result = $koneksi->query($sql);
-                    $row = $result->fetch_assoc();
-                    $userType = $row['kategoriID'];
-                    $sql1 = "SELECT * FROM tiket JOIN rute ON tiket.ruteID = rute.ruteID WHERE penggunaID = '$userID' ORDER BY tglBerangkat DESC;";
-                    $result1 = $koneksi->query($sql1);
-                    while ($row = $result1->fetch_assoc()) {
-                        echo '<tr>
-						        <td>' . $row["busID"] . '</td>
-						        <td>' . $row["ruteID"] . '</td>
-						        <td>' . $row["tglBerangkat"] . '</td>
-						        <td>' . $row["wktBerangkat"] . '</td>
-						        <td>' . $row["asal"] . '</td>
-						        <td>' . $row["tujuan"] . '</td>
-						        <td>' . $row["wktTiba"] . '</td>
-										<td>' . $row["noKursi"] . '</td>
-                    <td><a href="tiket.php?seat=' . $row['noKursi'] . '&bis=' . $row['busID'] . '" class="btn btn-info" role="button">Lihat</a></td>
-						      </tr>';
+              <tbody>';
+                      while ($row = $result1->fetch_assoc()) {
+                          echo '<tr>
+  						        <td>' . $row["busID"] . '</td>
+  						        <td>' . $row["ruteID"] . '</td>
+  						        <td>' . $row["tglBerangkat"] . '</td>
+  						        <td>' . $row["asal"] . '</td>
+  						        <td>' . $row["tujuan"] . '</td>
+                      <td>' . $row["wktBerangkat"] . '</td>
+  						        <td>' . $row["wktTiba"] . '</td>
+  										<td>' . $row["noKursi"] . '</td>
+                      <td><a href="tiket.php?seat=' . $row['noKursi'] . '&bis=' . $row['busID'] . '" class="btn btn-info" role="button">Lihat</a></td>
+  						      </tr>';
+                    }
                     }
                     ?>
               </tbody>
           </table>
-            
       </div>
+<script>
+</script>
   </body>
